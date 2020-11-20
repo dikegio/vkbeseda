@@ -7,6 +7,9 @@ vk = vk_api.VkApi(token=token)
 
 app = Flask(__name__)
 
+if __name__ == "__main__":
+    app.run()
+
 @app.route('/', methods = ["POST"])
 def main():
     data = json.loads(request.data)
@@ -23,3 +26,4 @@ def main():
         else:
             vk.method("messages.send", {"peer_id": id, "message": "Не понял тебя!", "random_id": random.randint(1, 200288454)})
     return "ok"
+    main()
