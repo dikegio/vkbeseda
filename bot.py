@@ -7,23 +7,18 @@ vk = vk_api.VkApi(token=token)
 
 app = Flask(__name__)
 
-if __name__ == "__main__":
-    app.run()
+longpoll = VkBotLongPoll(vk, "200288454")
 
-@app.route('/', methods = ["POST"])
-def main():
-    data = json.loads(request.data)
-    if data["type"] == "confirmation":
-        return "код подтверждения"
-    elif data["type"] == "message_new":
-        object = data["object"]
-        id = object["peer_id"]
-        body = object["text"]
-        if body.lower() == "привет":
-                vk.method("messages.send", {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 200288454)})
-        elif body.lower() == "я не подписан на канал it things":
-                vk.method("messages.send", {"peer_id": id, "message": "Казнить грешника!", "random_id": random.randint(1, 200288454)})
-        else:
-            vk.method("messages.send", {"peer_id": id, "message": "Не понял тебя!", "random_id": random.randint(1, 200288454)})
-    return "ok"
-    main()
+print("Бот запущен")
+
+while True:
+    for event in longpoll.listen():
+        if event.type == VkBotEventType.MESSAGE_NEW:
+            if event.object.peer_id != event.object.from_id:
+                if event.object.text.lower() == "привет":
+                    vk.method("messages.send", {"peer_id": event.object.peer_id, "message": event.object.text,
+                                                "random_id": 0})
+            elif event.object.peer_id == event.object.from_id:
+                if event.object.text.lower() == "привет":
+                    vk.method("messages.send", {"user_id": event.object.from_id, "message": event.object.text,
+                                                "random_id": 0})
