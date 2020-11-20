@@ -3,7 +3,7 @@ from flask import Flask, request, json
 import vk_api
 import random
 
-vk = vk_api.VkApi(token=c789048fbd4fcddcdb1bff75070d4d3cb5d3f1a545f85ef08493bb977b1f7d69ca0c0060c9845d6fcf2fa)
+vk = vk_api.VkApi(token=token)
 
 app = Flask(__name__)
 
